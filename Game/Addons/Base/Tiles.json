@@ -1,0 +1,145 @@
+{
+    "Metadata": {
+        "Version": "1.0.0",
+        "Author": "KillerDucks",
+        "License": "MIT"
+    },
+
+    "Tiles": [
+        {
+            "Type": "Blank_Space",
+            "ID": 0,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Blank Space"
+        },
+
+        {
+            "Type": "Generate",
+            "ID": 1,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Space Generate Tile"
+        },
+
+        {
+            "Type": "Death",
+            "ID": 2,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Death Tile"
+        },
+
+        {
+            "Type": "Damage",
+            "ID": 3,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Inflict Damage Tile"
+        },
+
+        {
+            "Type": "Chest",
+            "ID": 4,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Chest Tile"
+        },
+
+        {
+            "Type": "Foliage",
+            "ID": 5,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Foliage Tile 1"
+        },
+
+        {
+            "Type": "Foliage",
+            "ID": 6,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Foliage Tile 2"
+        },
+
+        {
+            "Type": "Foliage",
+            "ID": 7,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Foliage Tile 3"
+        },
+
+        {
+            "Type": "Foliage",
+            "ID": 8,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Foliage Tile 4"
+        },
+
+        {
+            "Type": "Water",
+            "ID": 9,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Water Tile 1"
+        },
+
+        {
+            "Type": "Water",
+            "ID": 10,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Water Tile 2"
+        },
+
+        {
+            "Type": "Water",
+            "ID": 11,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Water Tile 3"
+        },
+
+        {
+            "Type": "Water",
+            "ID": 12,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Water Tile 4"
+        },
+
+        {
+            "Type": "Terrain",
+            "ID": 13,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Terrain Tile 1"
+        },
+
+        {
+            "Type": "Terrain",
+            "ID": 14,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Terrain Tile 2"
+        },
+
+        {
+            "Type": "Terrain",
+            "ID": 15,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Terrain Tile 3"
+        },
+
+        {
+            "Type": "Terrain",
+            "ID": 16,
+            "Namespace": "Addons/Base",
+
+            "Custom_Name": "Terrain Tile 4"
+        }
+    ]
+}

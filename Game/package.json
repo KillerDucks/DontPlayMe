@@ -1,0 +1,27 @@
+{
+  "name": "dontplayme",
+  "version": "1.0.0",
+  "description": "A Game that plays itself",
+  "main": "app.js",
+  "scripts": {
+    "test": "node Tests/basic.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KillerDucks/DontPlayMe.git"
+  },
+  "keywords": [
+    "DontPlayMe"
+  ],
+  "author": "KillerDucks",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KillerDucks/DontPlayMe/issues"
+  },
+  "homepage": "https://github.com/KillerDucks/DontPlayMe#readme",
+  "dependencies": {
+    "express": "^4.17.0",
+    "logxyz": "^1.0.1",
+    "ws": "^7.0.0"
+  }
+}

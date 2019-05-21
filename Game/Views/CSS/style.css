@@ -1,0 +1,29 @@
+/* th {
+    align-self: center;
+    border: 1px solid #dddddd;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    width: 120px !important;
+    height: 120px !important;
+    text-align: center;
+} */
+
+td {
+    border: 1px solid #000000;
+    /* padding: 100px; */
+    /* width: 120px;
+    height: 120px; */
+}
+
+table {
+    width: 0% !important;
+    padding: 0% !important;
+    height: 0% !important;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 0px !important;
+    
+}
