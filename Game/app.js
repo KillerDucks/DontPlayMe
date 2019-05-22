@@ -29,6 +29,15 @@ wsServer.on("connection", HandleWSConnection.bind(this));
 // [WebSocket] Handle Connections
 function HandleWSConnection(ws)
 {
+    Game.Tick.on("Update", () =>{
+        // Package GameBoard
+        let packBoard = {
+            GameBoard: Game.GameBoard.Board,
+            Signature: null
+        }
+        ws.send(JSON.stringify(packBoard));
+    });
+
     ws.on("message", (data) => {
         LoggerX.Log({Namespace: "WebSocketServer", Info:`Client Message: ${data}`});
         if(data == "GET_BOARD")
