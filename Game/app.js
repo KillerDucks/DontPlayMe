@@ -29,13 +29,18 @@ wsServer.on("connection", HandleWSConnection.bind(this));
 // [WebSocket] Handle Connections
 function HandleWSConnection(ws)
 {
-    Game.Tick.on("Update", () =>{
+    Game.on("Update", () =>{
         // Package GameBoard
         let packBoard = {
             GameBoard: Game.GameBoard.Board,
             Signature: null
         }
         ws.send(JSON.stringify(packBoard));
+    });
+
+    Game.on("Transcript", (info) =>{
+        // Package GameBoard
+        ws.send(info);
     });
 
     ws.on("message", (data) => {
