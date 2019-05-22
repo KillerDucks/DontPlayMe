@@ -17,8 +17,9 @@ $(() => {
             // Use Detection later
             // Create a table !!!!
             let htmlTable = CreateTable(packedBoard.GameBoard);
-            console.log(htmlTable)
-            $(".GameBoard").append(htmlTable);
+            console.info("Table Rendered");
+            // $(".GameBoard").;
+            $(".GameBoard").html(htmlTable);
         }
         else
         {
@@ -30,15 +31,22 @@ $(() => {
     {
         let tableGen = ""
         GameBoard.forEach(col => {
-            console.log(`Column: ${col[0].ID.substr(1,1)}`);
+            // console.log(`Column: ${col[0].ID.substr(1,1)}`);
             tableGen += `<tr>`;
             col.forEach(row => {
-                console.log(`Row: ${JSON.stringify(row)}`);
-                tableGen += `<td><img src="./IMG/${row.Tile.Type}_${row.Tile.ID}.jpg"></td>`;
+                if(row.Tile.Players.length == 0)
+                {
+                    tableGen += `<td><img src="./IMG/${row.Tile.Type}_${row.Tile.ID}.jpg"></td>`;
+                }
+                else
+                {
+                    tableGen += `<td><img src="./IMG/Player_0.jpg"></td>`;
+                }
             });
             tableGen += "</tr>";
         });
         // console.log(`<table>${tableGen}</table>`)
+        console.info("Table Built");
         return `<table align="center" class="table">${tableGen}</table>`;
     }
 })
