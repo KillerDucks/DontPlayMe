@@ -7,6 +7,8 @@ class GameLogic {
         {
             this._Config = {};
             this.GameBoard = {};
+            this.Players = [];
+
             this._Config.LogXYZEnable = false;
 
             this._Config.Addon_Local_Load = true; // This is a true JSON file not a module.exports file
@@ -22,6 +24,10 @@ class GameLogic {
             // Add default configs for remote server stuff
 
             // console.log(this._Config)
+
+            // Events
+            const events = require('events');
+            this.Tick = new events.EventEmitter();
         }
         else
         {
@@ -45,6 +51,204 @@ class GameLogic {
         }
         // Populate the Board with tiles
         this.PopulateBoard();
+        // Initialise Player
+        this.CreatePlayer();
+        // Kick off the Server Ticks
+        this.ServerTick();
+    }
+
+    ServerTick()
+    {
+        setInterval(() => {
+            // Do Stuff ???? [TODO]
+            // Move Players for now (no interaction with chests, damage, etc....);
+            this.MovePlayers();
+            // Update Board
+            this.UpdateBoard();
+        }, 1000);
+    }
+
+    MovePlayers()
+    {
+        // Move the player with the appropriate speed [TODO] Single Movement right now
+        this.Players.forEach((player) => {
+
+            switch (this.RandomDirection()) {
+                case 0:
+                    // False move Y
+                    // Edge Detection
+                    if(player.Position.Y + 1 != this.GameBoard.Size)
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;                      
+                        player.Position.Y++;
+                    }
+                    else
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;
+                    }
+                    break;
+
+                case 1:
+                    // True move X
+                    // Edge Detection
+                    if(player.Position.X + 1 != this.GameBoard.Size)
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;        
+                        player.Position.X++;
+                    }
+                    else
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;
+                    }
+                    break;
+
+                case 2:
+                    // True move X & Y
+                    // Edge Detection
+                    if(player.Position.X + 1 != this.GameBoard.Size && player.Position.Y + 1 != this.GameBoard.Size)
+                    {
+                        
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;
+                        player.Position.X++;
+                        player.Position.Y++;
+                    }
+                    else
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;
+                    }
+                    break;
+
+                case 3:
+                        // False move Y
+                        // Edge Detection
+                        if(player.Position.Y - 1 != -1)
+                        {
+                            player.Position.Old[0] = player.Position.X;
+                            player.Position.Old[1] = player.Position.Y;
+                            player.Position.Y--;
+                        }
+                        else
+                        {
+                            player.Position.Old[0] = player.Position.X;
+                            player.Position.Old[1] = player.Position.Y;
+                        }
+                        break;
+
+                case 4:
+                    // True move X
+                    // Edge Detection
+                    if(player.Position.X - 1 != -1)
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;                        
+                        player.Position.X--;
+                    }
+                    else
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;
+                    }
+                    break;
+
+                case 5:
+                    // True move X & Y
+                    // Edge Detection
+                    if(player.Position.X - 1 != -1 && player.Position.Y - 1 != -1)
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;
+                        player.Position.X--;
+                        player.Position.Y--;
+                    }
+                    else
+                    {
+                        player.Position.Old[0] = player.Position.X;
+                        player.Position.Old[1] = player.Position.Y;
+                    }
+                    break;
+            
+                default:
+                    console.log("WOW A RANDOM NUMBER????")
+                    break;
+            }
+        });
+
+    }
+
+    CreatePlayer()
+    {
+        // This will create a player and will store the player in the Instance of the Class
+        let tPlayer = {
+            Name: "Elite_Player_" + this.Players.length,
+            UUID: this.GenerateUID,
+            Position: {
+                X: 0,
+                Y: 0,
+                Old: [0, 0]
+            },
+            Stats: {
+                Health: 100, // Possible to go over 100 :D
+                Speed: 1 // This refers to speed per second, so a speed of 1 will mean the player will move 1 tile per second
+            },
+            Items: [
+                {
+                    Type: "Weapon",
+                    Damage: 10
+                }
+            ],
+            HomeServer: null // This will be populated on a future release [TODO] [Feature]
+        }
+        console.log(`Player ${tPlayer.Name} Created`);
+        this.Players.push(tPlayer);
+        // Update the Board with a new Player
+        this.UpdateBoard();
+    }
+
+    UpdateBoard()
+    {
+        // This will update the board (Not Generate new sections)
+        // Simple implementation [TODO]
+        for (let i = 0; i < this.GameBoard.Size; i++) {
+            for (let x = 0; x < this.GameBoard.Size; x++) {
+                // Check Tile
+                this.Players.forEach((player) => {
+                    if(player.Position.X == i && player.Position.Y == x)
+                    {
+                        // Check to see if the player has moved
+                        if(player.Position.X == player.Position.Old[0] && player.Position.Y == player.Position.Old[1])
+                        {
+                            // Player is in the same position
+                            console.log(`${player.Name} has not moved from Position (${i},${x})`);
+                        }
+                        else
+                        {
+                            // Update the board transcript & the tile
+                            this.GameBoard.Board[player.Position.Old[0]][player.Position.Old[1]].Tile.Players.pop();
+
+                            // Check if the player has moved to a interaction tile
+                            switch (this.GameBoard.Board[i][x].Tile.ID) {
+                                case value:
+                                    
+                                    break;
+                            
+                                default:
+                                    break;
+                            }
+                            console.log(`${player.Name} has moved to ${this.GameBoard.Board[i][x].Tile.Type} @ Position (${i},${x})`);
+
+                            this.GameBoard.Board[i][x].Tile.Players.push(player);
+                            this.Tick.emit("Update");
+                        }                    
+                    }
+                });
+            }
+        }
     }
 
     LoadAddons()
@@ -154,7 +358,7 @@ class GameLogic {
                         Type: "Blank_Space",
                         ID: "0",
                         Populated: false,
-                        Players: null
+                        Players: []
                     }
                 };
             }
@@ -182,6 +386,7 @@ class GameLogic {
 
                 element.Tile.Type = sticky.Type;
                 element.Tile.ID = sticky.ID;
+                element.Tile.Populated = true;
                 // console.log(element); // [DEBUG]
                 // console.log('\n'); // [DEBUG]
             });
@@ -210,6 +415,14 @@ class GameLogic {
         // [TODO] Move this to a Dedicated RNG Server?
         return Math.floor(Math.random() * (+ this.GameBoard.Tiles.length - +1)) + +1; // Change Min to `1` to prevent generation of blank spaces
     }
+
+    RandomDirection()
+    {
+        // This will generate a random number [0 - 6] to decide which direction the player moves
+        // [TODO] Move this to a Dedicated RNG Server?
+        return Math.floor(Math.random() * (+ 6 - +0)) + +0;
+    }
+
 }
 
 module.exports = GameLogic; 
