@@ -1,4 +1,5 @@
 // This is a Browser JS File
+// [TODO] Fix the Player image sticking on Tiles a Player has died
 
 $(() => {
     const socket = new WebSocket("ws://localhost:9000");
@@ -23,6 +24,13 @@ $(() => {
         }
         else
         {
+            $(".Transcript").append("<div id='event'>" + event.data + "</div>");
+            // let elem = document.getElementsByClassName('Transcript');
+            // elem.scrollTop = elem.scrollHeight;
+            // scroll();
+            let pbox = $('.Transcript');
+            var height = pbox.scrollTop() + pbox.height() + $('Transcript').filter('.event:last').scrollTop();
+            pbox.animate({'scrollTop' : height}, 500);
             console.log(event.data);
         }
     });
@@ -34,6 +42,7 @@ $(() => {
             // console.log(`Column: ${col[0].ID.substr(1,1)}`);
             tableGen += `<tr>`;
             col.forEach(row => {
+                // console.log(row.Tile.Players.length);
                 if(row.Tile.Players.length == 0)
                 {
                     tableGen += `<td><img src="./IMG/${row.Tile.Type}_${row.Tile.ID}.jpg"></td>`;
