@@ -1,8 +1,11 @@
 // This Logic file will handle all game logic and alert the `EventBus` when a change occurs
 
-class GameLogic {
+const EventEmitter = require('events');
+
+class GameLogic extends EventEmitter{
     constructor(_Config = {})
     {
+        super();
         if(_Config == null || _Config == undefined || _Config.AddonFolder == undefined)
         {
             this._Config = {};
@@ -24,10 +27,6 @@ class GameLogic {
             // Add default configs for remote server stuff
 
             // console.log(this._Config)
-
-            // Events
-            const events = require('events');
-            this.Tick = new events.EventEmitter();
         }
         else
         {
@@ -205,6 +204,7 @@ class GameLogic {
             HomeServer: null // This will be populated on a future release [TODO] [Feature]
         }
         console.log(`Player ${tPlayer.Name} Created`);
+        this.emit("Transcript", `Player ${tPlayer.Name} Created`);
         this.Players.push(tPlayer);
         // Update the Board with a new Player
         this.UpdateBoard();
@@ -225,6 +225,7 @@ class GameLogic {
                         {
                             // Player is in the same position
                             console.log(`${player.Name} has not moved from Position (${i},${x})`);
+                            this.emit("Transcript", `${player.Name} has not moved from Position (${i},${x})`);
                         }
                         else
                         {
@@ -233,17 +234,51 @@ class GameLogic {
 
                             // Check if the player has moved to a interaction tile
                             switch (this.GameBoard.Board[i][x].Tile.ID) {
-                                case value:
-                                    
+                                case 1:
+                                    // Generate
+                                    break;
+
+                                case 2:
+                                    // Death
+                                    // Kill and Create Player
+                                    console.log(`${player.Name} has been killed ☠️`);
+                                    this.emit("Transcript", `${player.Name} has been killed ☠️`);
+                                    this.Players.pop();
+                                    this.GameBoard.Board[i][x].Tile.Players.pop();
+                                    this.CreatePlayer();
+                                    break;
+
+                                case 3:
+                                    // Damage
+                                    let damageTaken = this.RandomNumber()
+                                    console.log(`${player.Name} has been damaged ⚔️ for ${damageTaken}`);
+                                    this.emit("Transcript", `${player.Name} has been damaged ⚔️ for ${damageTaken}`);
+                                    player.Stats.Health = player.Stats.Health - damageTaken;
+                                    if(player.Stats.Health >= 0)
+                                    {
+                                        // Kill and Create Player
+                                        console.log(`${player.Name} has been killed ☠️`);
+                                        this.emit("Transcript", `${player.Name} has been killed ☠️`);
+                                        this.Players.pop();
+                                        this.GameBoard.Board[i][x].Tile.Players.pop();
+                                        this.CreatePlayer();
+                                    }
+                                    break;
+
+                                case 4:
+                                    // Chest
+                                    console.log(`${player.Name} has found a chest 📦`);
+                                    this.emit("Transcript", `${player.Name} has found a chest 📦`);
                                     break;
                             
                                 default:
                                     break;
                             }
                             console.log(`${player.Name} has moved to ${this.GameBoard.Board[i][x].Tile.Type} @ Position (${i},${x})`);
+                            this.emit("Transcript", `${player.Name} has moved to ${this.GameBoard.Board[i][x].Tile.Type} @ Position (${i},${x})`);
 
                             this.GameBoard.Board[i][x].Tile.Players.push(player);
-                            this.Tick.emit("Update");
+                            this.emit("Update");
                         }                    
                     }
                 });
