@@ -1,0 +1,5 @@
+# Global Ignore
+.vscode
+
+# C++ Specific
+Build
