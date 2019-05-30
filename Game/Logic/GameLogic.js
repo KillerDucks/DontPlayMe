@@ -232,10 +232,19 @@ class GameLogic extends EventEmitter{
                             // Update the board transcript & the tile
                             this.GameBoard.Board[player.Position.Old[0]][player.Position.Old[1]].Tile.Players.pop();
 
+                            console.log(`${player.Name} has moved to ${this.GameBoard.Board[i][x].Tile.Type} @ Position (${i},${x})`);
+                            this.emit("Transcript", `${player.Name} has moved to ${this.GameBoard.Board[i][x].Tile.Type} @ Position (${i},${x})`);
+
+                            this.GameBoard.Board[i][x].Tile.Players.push(player);
+
                             // Check if the player has moved to a interaction tile
                             switch (this.GameBoard.Board[i][x].Tile.ID) {
                                 case 1:
                                     // Generate
+                                    // Move all players to a new map
+                                    this.PopulateBoard();
+                                    console.log(`${player.Name} has teleported all players to a new place`);
+                                    this.emit("Transcript", `${player.Name} has teleported all players to a new place`);
                                     break;
 
                                 case 2:
@@ -244,7 +253,7 @@ class GameLogic extends EventEmitter{
                                     console.log(`${player.Name} has been killed ☠️`);
                                     this.emit("Transcript", `${player.Name} has been killed ☠️`);
                                     this.Players.pop();
-                                    this.GameBoard.Board[i][x].Tile.Players.pop();
+                                    this.GameBoard.Board[i][x].Tile.Players = [];
                                     this.CreatePlayer();
                                     break;
 
@@ -252,11 +261,12 @@ class GameLogic extends EventEmitter{
                                     // Damage
                                     let damageTaken = this.RandomNumber()
                                     console.log(`${player.Name} has been damaged ⚔️ for ${damageTaken}`);
-                                    this.emit("Transcript", `${player.Name} has been damaged ⚔️ for ${damageTaken}`);
                                     player.Stats.Health = player.Stats.Health - damageTaken;
-                                    if(player.Stats.Health >= 0)
+                                    this.emit("Transcript", `${player.Name} has been damaged ⚔️ for ${damageTaken} and is at ${player.Stats.Health}HP`);
+                                    if(player.Stats.Health <= 0)
                                     {
                                         // Kill and Create Player
+                                        console.log(`${player.Name} Last Heath: ${player.Stats.Health}`);
                                         console.log(`${player.Name} has been killed ☠️`);
                                         this.emit("Transcript", `${player.Name} has been killed ☠️`);
                                         this.Players.pop();
@@ -274,10 +284,6 @@ class GameLogic extends EventEmitter{
                                 default:
                                     break;
                             }
-                            console.log(`${player.Name} has moved to ${this.GameBoard.Board[i][x].Tile.Type} @ Position (${i},${x})`);
-                            this.emit("Transcript", `${player.Name} has moved to ${this.GameBoard.Board[i][x].Tile.Type} @ Position (${i},${x})`);
-
-                            this.GameBoard.Board[i][x].Tile.Players.push(player);
                             this.emit("Update");
                         }                    
                     }
